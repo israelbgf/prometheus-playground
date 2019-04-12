@@ -1,0 +1,9 @@
+route:
+  receiver: default
+receivers:
+  - name: default
+    email_configs:
+      - to: 'admin@example.com'
+        from: 'admin@example.com'
+        smarthost: 'mailbox:25'
+        require_tls: false

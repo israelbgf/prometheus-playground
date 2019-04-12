@@ -1,0 +1,26 @@
+version: "3"
+services:
+  prometheus:
+    image: prom/prometheus:v2.8.1
+    command: "--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./rules.yml:/etc/prometheus/rules.yml
+    ports:
+      - 9090:9090
+  node:
+    image: prom/node-exporter:v0.17.0
+    ports:
+      - 9100:9100
+  alertmanager:
+    image: prom/alertmanager:v0.16.2
+    command: "--config.file=/etc/prometheus/alertmanager.yml"
+    volumes:
+      - ./alertmanager.yml:/etc/prometheus/alertmanager.yml
+    ports:
+      - 9093:9093
+  mailbox:
+    image: djfarrelly/maildev
+    ports:
+      - "8825:25"
+      - "8025:80"
