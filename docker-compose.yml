@@ -21,7 +21,6 @@ services:
       - ./alertmanager.yml:/etc/prometheus/alertmanager.yml
     ports:
       - 9093:9093
-      -
   mailbox:
     image: djfarrelly/maildev
     ports:
