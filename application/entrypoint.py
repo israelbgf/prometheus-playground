@@ -1,19 +1,32 @@
-import http.server
-from prometheus_client import start_http_server
+import falcon
+from prometheus_client import Counter
+from prometheus_client import generate_latest
+from werkzeug.serving import run_simple
+
+REQUESTS = Counter('hello_worlds_total', 'Hello Worlds requested.')
+
+SERVER_HOST = '0.0.0.0'
+SERVER_PORT = 8080
+PROMETHEUS_PORT = 8081
 
 
-class MyHandler(http.server.BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"Hello World")
+class RootResource(object):
+    def on_get(self, req, resp):
+        REQUESTS.inc()
+        resp.body = "Hello World"
+        resp.status = falcon.HTTP_200
 
 
-sever_address = ('0.0.0.0', 8080)
-prometheus_port = 8081
+class PrometheusResource(object):
+    def on_get(self, req, resp):
+        data = generate_latest()
+        resp.content_type = 'text/plain; version=0.0.4; charset=utf-8'
+        resp.body = str(data.decode('utf-8'))
+
+
+app = falcon.API()
+app.add_route('/', RootResource())
+app.add_route('/metrics', PrometheusResource())
 
 if __name__ == "__main__":
-    print("Server started... {}".format(sever_address))
-    start_http_server(prometheus_port)
-    server = http.server.HTTPServer(sever_address, MyHandler)
-    server.serve_forever()
+    run_simple(SERVER_HOST, SERVER_PORT, app, use_reloader=True, use_debugger=True)
