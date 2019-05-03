@@ -9,7 +9,7 @@ services:
     ports:
       - 9090:9090
 
-  node:
+  node-exporter:
     image: prom/node-exporter:v0.17.0
     ports:
       - 9100:9100
