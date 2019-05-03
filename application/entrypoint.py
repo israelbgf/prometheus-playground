@@ -9,8 +9,8 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"Hello World")
 
 
-sever_address = ('0.0.0.0', 8001)
-prometheus_port = 8000
+sever_address = ('0.0.0.0', 8080)
+prometheus_port = 8081
 
 if __name__ == "__main__":
     print("Server started... {}".format(sever_address))
