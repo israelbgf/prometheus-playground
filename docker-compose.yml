@@ -21,8 +21,16 @@ services:
       - ./alertmanager.yml:/etc/prometheus/alertmanager.yml
     ports:
       - 9093:9093
+
   mailbox:
     image: djfarrelly/maildev
     ports:
       - "8825:25"
       - "8025:80"
+
+  application:
+    build: .
+    volumes:
+      - ./application:/application
+    ports:
+      - "8080:8001"
