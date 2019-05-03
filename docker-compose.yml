@@ -34,3 +34,4 @@ services:
       - ./application:/application
     ports:
       - "8080:8001"
+      - "8081:8000"
